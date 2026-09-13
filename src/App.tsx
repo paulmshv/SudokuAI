@@ -39,6 +39,7 @@ function App() {
   const [determinableCells, setDeterminableCells] = useState<{ row: number; col: number; value: number }[]>([]);
   const [showDeterminable, setShowDeterminable] = useState(false);
   const [animatingCell, setAnimatingCell] = useState<string | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const t = translations[lang];
@@ -546,6 +547,12 @@ function App() {
         >
           🔄 {t.reset}
         </button>
+        <button
+          onClick={() => setShowHelp(true)}
+          className="px-4 py-2.5 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 hover:from-indigo-500/30 hover:to-violet-500/30 text-indigo-300 border border-indigo-500/30 rounded-xl font-medium transition-all hover:scale-105 active:scale-95 text-sm"
+        >
+          ❓ {t.help}
+        </button>
       </div>
 
       {/* Instructions */}
@@ -581,6 +588,90 @@ function App() {
                 className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-xl font-bold hover:from-yellow-300 hover:to-orange-400 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/30"
               >
                 🎮 {t.newGame}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Help Modal */}
+      {showHelp && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 animate-fadeIn p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-indigo-900 rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
+                <span className="text-3xl">📖</span>
+                {t.helpTitle}
+              </h2>
+              <button
+                onClick={() => setShowHelp(false)}
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-6 text-white/80">
+              {/* Rules */}
+              <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <h3 className="text-lg font-bold text-yellow-300 mb-3 flex items-center gap-2">
+                  <span className="text-xl">📋</span>
+                  {t.helpRules}
+                </h3>
+                <p className="leading-relaxed">{t.helpRulesText}</p>
+              </div>
+
+              {/* Controls */}
+              <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <h3 className="text-lg font-bold text-cyan-300 mb-3 flex items-center gap-2">
+                  <span className="text-xl">🎮</span>
+                  {t.helpControls}
+                </h3>
+                <p className="leading-relaxed">{t.helpControlsText}</p>
+              </div>
+
+              {/* Features */}
+              <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <h3 className="text-lg font-bold text-purple-300 mb-3 flex items-center gap-2">
+                  <span className="text-xl">✨</span>
+                  {t.helpFeatures}
+                </h3>
+                <p className="leading-relaxed whitespace-pre-line">{t.helpFeaturesText}</p>
+              </div>
+
+              {/* Themes */}
+              <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <h3 className="text-lg font-bold text-pink-300 mb-3 flex items-center gap-2">
+                  <span className="text-xl">🎨</span>
+                  {t.helpThemes}
+                </h3>
+                <p className="leading-relaxed">{t.helpThemesText}</p>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {themes.map(th => (
+                    <div key={th.id} className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2">
+                      <span className="text-2xl">{th.emoji}</span>
+                      <span className="text-sm">{t[th.id as keyof typeof t]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Difficulty */}
+              <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+                <h3 className="text-lg font-bold text-emerald-300 mb-3 flex items-center gap-2">
+                  <span className="text-xl">📊</span>
+                  {t.helpDifficulty}
+                </h3>
+                <p className="leading-relaxed whitespace-pre-line">{t.helpDifficultyText}</p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => setShowHelp(false)}
+                className="px-8 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-xl font-bold hover:from-yellow-300 hover:to-orange-400 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/30"
+              >
+                {t.helpClose}
               </button>
             </div>
           </div>
