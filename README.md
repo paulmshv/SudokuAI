@@ -88,6 +88,77 @@ npm run build
 
 The built files will be in the `dist/` directory.
 
+## 🌐 Deploy to GitHub Pages
+
+This project includes automatic deployment to GitHub Pages using GitHub Actions.
+
+### Quick Setup (Automated)
+
+Run the setup script to automatically configure everything:
+
+```bash
+# Make the script executable
+chmod +x setup-gh-pages.sh
+
+# Run the setup script
+./setup-gh-pages.sh
+```
+
+The script will:
+- Detect your GitHub repository name
+- Configure the base URL for GitHub Pages
+- Update Vite configuration
+
+### Manual Setup
+
+If you prefer to set up manually:
+
+1. **Update `.env.production`** with your repository info:
+```bash
+VITE_BASE_URL=/your-username/your-repo-name/
+```
+
+2. **Commit and push** to GitHub:
+```bash
+git add .
+git commit -m "Configure GitHub Pages deployment"
+git push origin main
+```
+
+3. **Enable GitHub Pages** in your repository:
+   - Go to your repository on GitHub
+   - Navigate to **Settings** → **Pages**
+   - Under **Source**, select **GitHub Actions**
+   - The workflow will automatically deploy on every push to `main`
+
+4. **Access your site** at:
+```
+https://your-username.github.io/your-repo-name/
+```
+
+### How It Works
+
+The deployment workflow (`.github/workflows/deploy.yml`) automatically:
+- Builds the project on every push to `main`
+- Uploads the build artifacts
+- Deploys to GitHub Pages
+
+You can also manually trigger deployments from the **Actions** tab in your repository.
+
+### Troubleshooting
+
+**Blank page after deployment?**
+- Make sure `VITE_BASE_URL` in `.env.production` matches your repository name exactly
+- Check that the workflow completed successfully in the Actions tab
+
+**Assets not loading?**
+- Verify the base URL format: `/<username>/<repo-name>/`
+- Rebuild and push: `npm run build && git add dist && git commit -m "rebuild" && git push`
+
+**Workflow not running?**
+- Ensure GitHub Actions are enabled in your repository settings
+- Check that you're pushing to the `main` branch
+
 ## 🎮 How to Play
 
 ### Basic Rules
