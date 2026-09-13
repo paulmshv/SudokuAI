@@ -161,28 +161,45 @@ function App() {
     }
   };
 
-  // Auto-solve
+  // Auto-solve with step-by-step animation
   const handleAutoSolve = () => {
-    const solved = solveSudoku(currentBoard);
-    if (solved) {
-      // Animate solving
-      let step = 0;
-      const animate = () => {
-        if (step < 81) {
-          const row = Math.floor(step / 9);
-          const col = step % 9;
-          if (currentBoard[row][col] === null || currentBoard[row][col] !== solved[row][col]) {
-            const newBoard = currentBoard.map(r => [...r]);
-            // Fill all at once for simplicity
-            setCurrentBoard(solved.map(r => [...r]));
-            setIsComplete(true);
-            setTimerActive(false);
-            showMessage(t.congratulations, 'success');
-          }
+    if (solution.length === 0) return;
+
+    // Use the pre-computed solution
+    const solved = solution.map(row => [...row]);
+    
+    // Find cells that need to be filled
+    const cellsToFill: [number, number][] = [];
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (currentBoard[row][col] === null || currentBoard[row][col] !== solved[row][col]) {
+          cellsToFill.push([row, col]);
         }
-      };
-      animate();
+      }
     }
+
+    // Animate filling cells one by one
+    let index = 0;
+    const board = currentBoard.map(r => [...r]);
+
+    const animateStep = () => {
+      if (index < cellsToFill.length) {
+        const [row, col] = cellsToFill[index];
+        board[row][col] = solved[row][col];
+        setCurrentBoard(board.map(r => [...r]));
+        setAnimatingCell(`${row}-${col}`);
+        index++;
+        setTimeout(animateStep, 30); // 30ms delay between each cell
+      } else {
+        // All cells filled
+        setIsComplete(true);
+        setTimerActive(false);
+        showMessage(t.congratulations, 'success');
+        setTimeout(() => setAnimatingCell(null), 200);
+      }
+    };
+
+    animateStep();
   };
 
   // Show hint
