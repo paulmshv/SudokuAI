@@ -106,39 +106,47 @@ function App() {
     return themeSymbols[theme][num - 1];
   };
 
-  // Handle cell click - cycle through values
+  // Handle cell click - select cell or cycle value if already selected
   const handleCellClick = (row: number, col: number) => {
-    if (puzzle[row]?.[col] !== null && puzzle[row]?.[col] !== undefined) return;
+    if (puzzle[row]?.[col] !== null && puzzle[row]?.[col] !== undefined) {
+      // Original cell - just select it to show highlighting
+      setSelectedCell([row, col]);
+      return;
+    }
     if (isComplete) return;
 
-    setSelectedCell([row, col]);
     setHintCell(null);
     setShowHintValue(false);
     setShowDeterminable(false);
 
-    // Cycle value on click
-    const current = currentBoard[row][col];
-    let next: number | null;
-    if (current === null) {
-      next = 1;
-    } else if (current === 9) {
-      next = null;
+    // If clicking on already selected cell, cycle value
+    if (selectedCell?.[0] === row && selectedCell?.[1] === col) {
+      const current = currentBoard[row][col];
+      let next: number | null;
+      if (current === null) {
+        next = 1;
+      } else if (current === 9) {
+        next = null;
+      } else {
+        next = current + 1;
+      }
+
+      const newBoard = currentBoard.map(r => [...r]);
+      newBoard[row][col] = next;
+      setCurrentBoard(newBoard);
+      setMoves(prev => prev + 1);
+      setShowErrors(false);
+      setAnimatingCell(`${row}-${col}`);
+      setTimeout(() => setAnimatingCell(null), 200);
+
+      if (next !== null && isBoardComplete(newBoard)) {
+        setIsComplete(true);
+        setTimerActive(false);
+        showMessage(t.congratulations, 'success');
+      }
     } else {
-      next = current + 1;
-    }
-
-    const newBoard = currentBoard.map(r => [...r]);
-    newBoard[row][col] = next;
-    setCurrentBoard(newBoard);
-    setMoves(prev => prev + 1);
-    setShowErrors(false);
-    setAnimatingCell(`${row}-${col}`);
-    setTimeout(() => setAnimatingCell(null), 200);
-
-    if (next !== null && isBoardComplete(newBoard)) {
-      setIsComplete(true);
-      setTimerActive(false);
-      showMessage(t.congratulations, 'success');
+      // Just select the cell
+      setSelectedCell([row, col]);
     }
   };
 
@@ -189,13 +197,15 @@ function App() {
         setCurrentBoard(board.map(r => [...r]));
         setAnimatingCell(`${row}-${col}`);
         index++;
-        setTimeout(animateStep, 30); // 30ms delay between each cell
+        setTimeout(animateStep, 50); // 50ms delay between each cell
       } else {
-        // All cells filled
-        setIsComplete(true);
-        setTimerActive(false);
-        showMessage(t.congratulations, 'success');
+        // All cells filled - show victory after a delay
         setTimeout(() => setAnimatingCell(null), 200);
+        setTimeout(() => {
+          setIsComplete(true);
+          setTimerActive(false);
+          showMessage(t.congratulations, 'success');
+        }, 500); // Wait 500ms before showing victory screen
       }
     };
 
