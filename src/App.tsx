@@ -41,6 +41,7 @@ function App() {
   const [animatingCell, setAnimatingCell] = useState<string | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastClickedCell = useRef<string | null>(null);
 
   const t = translations[lang];
 
@@ -79,6 +80,7 @@ function App() {
     setHintCell(null);
     setShowHintValue(false);
     setSelectedCell(null);
+    lastClickedCell.current = null;
     setIsComplete(false);
     setMoves(0);
     setTime(0);
@@ -111,6 +113,7 @@ function App() {
     if (puzzle[row]?.[col] !== null && puzzle[row]?.[col] !== undefined) {
       // Original cell - just select it to show highlighting
       setSelectedCell([row, col]);
+      lastClickedCell.current = `${row}-${col}`;
       return;
     }
     if (isComplete) return;
@@ -119,8 +122,11 @@ function App() {
     setShowHintValue(false);
     setShowDeterminable(false);
 
-    // If clicking on already selected cell, cycle value
-    if (selectedCell?.[0] === row && selectedCell?.[1] === col) {
+    const cellKey = `${row}-${col}`;
+    const wasAlreadySelected = lastClickedCell.current === cellKey;
+
+    if (wasAlreadySelected) {
+      // Cycle value
       const current = currentBoard[row][col];
       let next: number | null;
       if (current === null) {
@@ -136,7 +142,7 @@ function App() {
       setCurrentBoard(newBoard);
       setMoves(prev => prev + 1);
       setShowErrors(false);
-      setAnimatingCell(`${row}-${col}`);
+      setAnimatingCell(cellKey);
       setTimeout(() => setAnimatingCell(null), 200);
 
       if (next !== null && isBoardComplete(newBoard)) {
@@ -147,6 +153,7 @@ function App() {
     } else {
       // Just select the cell
       setSelectedCell([row, col]);
+      lastClickedCell.current = cellKey;
     }
   };
 
@@ -219,6 +226,7 @@ function App() {
       setHintCell(hint);
       setShowHintValue(false);
       setSelectedCell([hint.row, hint.col]);
+      lastClickedCell.current = `${hint.row}-${hint.col}`;
 
       const determinable = findDeterminableCells(currentBoard);
       setDeterminableCells(determinable);
@@ -264,6 +272,7 @@ function App() {
   const handleReset = () => {
     setCurrentBoard(puzzle.map(row => [...row]));
     setSelectedCell(null);
+    lastClickedCell.current = null;
     setHintCell(null);
     setShowHintValue(false);
     setErrors(new Set());
@@ -291,15 +300,19 @@ function App() {
       } else if (e.key === 'ArrowUp' && row > 0) {
         e.preventDefault();
         setSelectedCell([row - 1, col]);
+        lastClickedCell.current = `${row - 1}-${col}`;
       } else if (e.key === 'ArrowDown' && row < 8) {
         e.preventDefault();
         setSelectedCell([row + 1, col]);
+        lastClickedCell.current = `${row + 1}-${col}`;
       } else if (e.key === 'ArrowLeft' && col > 0) {
         e.preventDefault();
         setSelectedCell([row, col - 1]);
+        lastClickedCell.current = `${row}-${col - 1}`;
       } else if (e.key === 'ArrowRight' && col < 8) {
         e.preventDefault();
         setSelectedCell([row, col + 1]);
+        lastClickedCell.current = `${row}-${col + 1}`;
       }
     };
 
