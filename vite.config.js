@@ -4,8 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: process.env.VITE_BASE_URL || "/",
-  //base: '/SudokuAI/', // Замените на имя вашего репозитория
+  //base: process.env.VITE_BASE_URL || "/",
+  base: '/SudokuAI/', // Замените на имя вашего репозитория
   server: {
     host: "0.0.0.0",
     port: 3000,
