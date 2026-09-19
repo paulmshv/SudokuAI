@@ -70,6 +70,9 @@ export const translations: Record<Language, Record<string, string>> = {
     helpDifficulty: 'Уровни сложности',
     helpDifficultyText: '• Очень легко: 30 пустых клеток\n• Легко: 38 пустых клеток\n• Средне: 45 пустых клеток\n• Сложно: 52 пустых клеток\n• Эксперт: 56 пустых клеток',
     helpClose: 'Закрыть',
+    colorMode: 'Тема',
+    lightMode: 'Светлая',
+    darkMode: 'Тёмная',
   },
   en: {
     title: 'Sudoku',
@@ -114,6 +117,9 @@ export const translations: Record<Language, Record<string, string>> = {
     helpDifficulty: 'Difficulty Levels',
     helpDifficultyText: '• Very Easy: 30 empty cells\n• Easy: 38 empty cells\n• Medium: 45 empty cells\n• Hard: 52 empty cells\n• Expert: 56 empty cells',
     helpClose: 'Close',
+    colorMode: 'Theme',
+    lightMode: 'Light',
+    darkMode: 'Dark',
   },
   es: {
     title: 'Sudoku',
@@ -158,6 +164,9 @@ export const translations: Record<Language, Record<string, string>> = {
     helpDifficulty: 'Niveles de dificultad',
     helpDifficultyText: '• Muy fácil: 30 celdas vacías\n• Fácil: 38 celdas vacías\n• Medio: 45 celdas vacías\n• Difícil: 52 celdas vacías\n• Experto: 56 celdas vacías',
     helpClose: 'Cerrar',
+    colorMode: 'Tema',
+    lightMode: 'Claro',
+    darkMode: 'Oscuro',
   },
   de: {
     title: 'Sudoku',
@@ -202,6 +211,9 @@ export const translations: Record<Language, Record<string, string>> = {
     helpDifficulty: 'Schwierigkeitsgrade',
     helpDifficultyText: '• Sehr leicht: 30 leere Zellen\n• Leicht: 38 leere Zellen\n• Mittel: 45 leere Zellen\n• Schwer: 52 leere Zellen\n• Experte: 56 leere Zellen',
     helpClose: 'Schließen',
+    colorMode: 'Thema',
+    lightMode: 'Hell',
+    darkMode: 'Dunkel',
   },
   zh: {
     title: '数独',
@@ -246,5 +258,8 @@ export const translations: Record<Language, Record<string, string>> = {
     helpDifficulty: '难度等级',
     helpDifficultyText: '• 非常简单：30个空格\n• 简单：38个空格\n• 中等：45个空格\n• 困难：52个空格\n• 专家：56个空格',
     helpClose: '关闭',
+    colorMode: '主题',
+    lightMode: '浅色',
+    darkMode: '深色',
   },
 };
